@@ -1,1 +1,1 @@
-# ogame
+## oGame frontend application
