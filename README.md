@@ -1,1 +1,1 @@
-## oGame frontend application
+## NoGame frontend application
