@@ -1,0 +1,14 @@
+{
+  "name": "nogame",
+  "version": "1.0.0",
+  "description": "On-chain version of the popular Ogame",
+  "main": "index.js",
+  "repository": "https://github.com/Matchbox-DAO/nogame",
+  "author": "dhruvkelawala <dhruvrk2000@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@starknet-react/core": "^0.7.2",
+    "starknet": "^3.9.0",
+    "styled-components": "^5.3.5"
+  }
+}
