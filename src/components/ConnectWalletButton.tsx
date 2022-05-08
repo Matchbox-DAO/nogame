@@ -1,26 +1,7 @@
 import { useStarknet } from '@starknet-react/core'
 import { InjectedConnector } from '@starknet-react/core'
 import { useEffect, useMemo } from 'react'
-import styled from 'styled-components'
-
-const StyledButton = styled.button<{ error?: boolean }>`
-  box-shadow: none;
-  padding: 5px 20px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: ${({ error }) => (error ? 'rgb(255, 7, 58)' : 'white')};
-  border-radius: 6px;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: all 0.2s ease 0s;
-  color: white;
-  font-size: 20px;
-  font-weight: 300;
-  cursor: pointer;
-`
+import ClassicButton from '~/components/UIComponents/Buttons/ClassicButton'
 
 export function ConnectWalletButton() {
   const { account, connect, error } = useStarknet()
@@ -43,7 +24,7 @@ export function ConnectWalletButton() {
 
   if (account) {
     const shortenedAddress = `${account.substring(0, 6)}...${account.substring(59)}`
-    return <StyledButton>{shortenedAddress}</StyledButton>
+    return <ClassicButton>{shortenedAddress}</ClassicButton>
   }
 
   if (error) {
@@ -52,11 +33,11 @@ export function ConnectWalletButton() {
 
     const downloadArgentX = () => window.open(argentXUrl, '_blank')
     return (
-      <StyledButton error={!!error} onClick={downloadArgentX}>
+      <ClassicButton isError={!!error} onClick={downloadArgentX}>
         Download ArgentX Wallet
-      </StyledButton>
+      </ClassicButton>
     )
   }
 
-  return <StyledButton onClick={() => connect(injected)}>Connect Wallet</StyledButton>
+  return <ClassicButton onClick={() => connect(injected)}>Connect Wallet</ClassicButton>
 }

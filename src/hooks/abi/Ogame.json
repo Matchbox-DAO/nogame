@@ -1,0 +1,387 @@
+[
+    {
+        "members": [
+            {
+                "name": "low",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "high",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Uint256",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "members": [
+            {
+                "name": "metal",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "crystal",
+                "offset": 1,
+                "type": "felt"
+            },
+            {
+                "name": "deuterium",
+                "offset": 2,
+                "type": "felt"
+            }
+        ],
+        "name": "Cost",
+        "size": 3,
+        "type": "struct"
+    },
+    {
+        "data": [
+            {
+                "name": "planet_id",
+                "type": "Uint256"
+            }
+        ],
+        "keys": [],
+        "name": "planet_genereted",
+        "type": "event"
+    },
+    {
+        "data": [
+            {
+                "name": "metal_used",
+                "type": "felt"
+            },
+            {
+                "name": "crystal_used",
+                "type": "felt"
+            },
+            {
+                "name": "deuterium_used",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "structure_updated",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "number_of_planets",
+        "outputs": [
+            {
+                "name": "n_planets",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "address",
+                "type": "felt"
+            }
+        ],
+        "name": "owner_of",
+        "outputs": [
+            {
+                "name": "planet_id",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "erc721_address",
+        "outputs": [
+            {
+                "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "metal_address",
+        "outputs": [
+            {
+                "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "crystal_address",
+        "outputs": [
+            {
+                "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "deuterium_address",
+        "outputs": [
+            {
+                "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "your_address",
+                "type": "felt"
+            }
+        ],
+        "name": "get_structures_levels",
+        "outputs": [
+            {
+                "name": "metal_mine",
+                "type": "felt"
+            },
+            {
+                "name": "crystal_mine",
+                "type": "felt"
+            },
+            {
+                "name": "deuterium_mine",
+                "type": "felt"
+            },
+            {
+                "name": "solar_plant",
+                "type": "felt"
+            },
+            {
+                "name": "robot_factory",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "your_address",
+                "type": "felt"
+            }
+        ],
+        "name": "resources_available",
+        "outputs": [
+            {
+                "name": "metal",
+                "type": "felt"
+            },
+            {
+                "name": "crystal",
+                "type": "felt"
+            },
+            {
+                "name": "deuterium",
+                "type": "felt"
+            },
+            {
+                "name": "energy",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "your_address",
+                "type": "felt"
+            }
+        ],
+        "name": "get_structures_upgrade_cost",
+        "outputs": [
+            {
+                "name": "metal_mine",
+                "type": "Cost"
+            },
+            {
+                "name": "crystal_mine",
+                "type": "Cost"
+            },
+            {
+                "name": "deuterium_mine",
+                "type": "Cost"
+            },
+            {
+                "name": "solar_plant",
+                "type": "Cost"
+            },
+            {
+                "name": "robot_factory",
+                "type": "Cost"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "your_address",
+                "type": "felt"
+            }
+        ],
+        "name": "build_time_completion",
+        "outputs": [
+            {
+                "name": "building_id",
+                "type": "felt"
+            },
+            {
+                "name": "time_end",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "your_address",
+                "type": "felt"
+            }
+        ],
+        "name": "player_points",
+        "outputs": [
+            {
+                "name": "points",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "erc721_address",
+                "type": "felt"
+            },
+            {
+                "name": "owner",
+                "type": "felt"
+            }
+        ],
+        "name": "constructor",
+        "outputs": [],
+        "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "name": "metal_token",
+                "type": "felt"
+            },
+            {
+                "name": "crystal_token",
+                "type": "felt"
+            },
+            {
+                "name": "deuterium_token",
+                "type": "felt"
+            }
+        ],
+        "name": "erc20_addresses",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "generate_planet",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "collect_resources",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "metal_upgrade_start",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "metal_upgrade_complete",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "crystal_upgrade_start",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "crystal_upgrade_complete",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "deuterium_upgrade_start",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "deuterium_upgrade_complete",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "solar_plant_upgrade_start",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "solar_plant_upgrade_complete",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "robot_factory_upgrade_start",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "robot_factory_upgrade_complete",
+        "outputs": [],
+        "type": "function"
+    }
+]
