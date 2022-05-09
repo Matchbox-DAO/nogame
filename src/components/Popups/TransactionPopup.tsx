@@ -74,7 +74,7 @@ export default function TransactionPopup({
       <AutoColumn gap="8px" style={{ marginTop: '1px' }}>
         <AutoRow>
           <StatusHeader style={{ paddingRight: 16 }} success={success} pending={pending}>
-            {status ? `Solution ${getStatusHeader(status)}` : `Solution Submitted`}
+            {status ? `Transaction ${getStatusHeader(status)}` : `Transaction Submitted`}
           </StatusHeader>
         </AutoRow>
         <AutoColumn gap="12px">
