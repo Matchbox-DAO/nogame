@@ -57,13 +57,13 @@ export const TYPE = {
 export const FixedGlobalStyle = createGlobalStyle`
 
 html, input, textarea, button {
-  font-family: Poppins, sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
   font-display: fallback;
  }
 
  @supports (font-variation-settings: normal) {
   html, input, textarea, button {
-  font-family: Poppins, sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
    }
 }
 
@@ -97,9 +97,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
 html {
   background-repeat: no-repeat;
   background-size: cover;
-  backdrop-filter: blur(400px);
-  background-color: #2d405e;
-  background-image: url(${bg.src});
+  background-color: #151A1E;
   color: white;
 }
 `

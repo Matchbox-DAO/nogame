@@ -1,3 +1,4 @@
+import { ButtonProps } from 'rebass'
 import styled from 'styled-components'
 
 const StyledButton = styled.button<{ error?: boolean }>`
@@ -30,9 +31,9 @@ interface Props {
   onClick?: () => void
 }
 
-const ClassicButton = ({ isError, onClick, children }: Props) => {
+const ClassicButton = ({ isError, onClick, children, ...rest }: Props & ButtonProps) => {
   return (
-    <StyledButton error={isError} onClick={onClick}>
+    <StyledButton error={isError} onClick={onClick} {...rest}>
       {children}
     </StyledButton>
   )

@@ -4,49 +4,65 @@ import { ConnectWalletButton } from '~/components/ConnectWalletButton'
 
 import Image from 'next/image'
 import logo from 'src/assets/logo.png'
-import OBox from '~/components/OBox'
-import ClassicButton from '~/components/UIComponents/Buttons/ClassicButton'
+import { ButtonPrimary } from '~/components/Button'
+import { ColumnCenter } from '~/components/Column'
 
-const ImgWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: end;
-  position: relative;
-  padding-right: 100px;
-  bottom: 30px;
-`
-
-const ButtonWrapper = styled.div`
-  width: 100%;
-  height: 30vh;
-  flex: 1;
-  display: flex;
+const MainWrapper = styled(ColumnCenter)`
+  height: 80vh;
   justify-content: center;
-  align-items: center;
+  gap: 16px;
 `
 
-interface Props {
+const SubText = styled.div`
+  color: #ffffff;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  padding: 0 15px 16px;
+  width: 20%;
+
+  color: #ffffff;
+
+  opacity: 0.5;
+`
+
+interface AuthScreenProps {
   generatePlanet: () => void
   address?: string
+  loading: boolean
+  walletConnectLoading: boolean
 }
 
-const ConnectArgentx = ({ address, generatePlanet }: Props) => {
+const AuthScreen = ({ address, generatePlanet, loading = true, walletConnectLoading }: AuthScreenProps) => {
   return (
-    <OBox title={'WELCOME'}>
-      <ImgWrapper>
-        <div style={{ width: 250 }}>
-          <Image src={logo} alt="logo" objectFit="contain" />
-        </div>
-      </ImgWrapper>
-      <ButtonWrapper>
-        <div style={{ minWidth: 300 }}>
-          {!address && <ConnectWalletButton />}
-          {address && generatePlanet && <ClassicButton onClick={() => generatePlanet()}>GENERATE PLANET</ClassicButton>}
-        </div>
-      </ButtonWrapper>
-    </OBox>
+    <MainWrapper>
+      <div style={{ width: '300px' }}>
+        <Image src={logo} alt="logo" objectFit="contain" />
+      </div>
+
+      <SubText>Manage your resources, discover new worlds and conquer the galaxy!</SubText>
+
+      <div>
+        {!address ? (
+          walletConnectLoading ? (
+            <ButtonPrimary disabled>Loading...</ButtonPrimary>
+          ) : (
+            <ConnectWalletButton />
+          )
+        ) : null}
+
+        {address ? (
+          loading ? (
+            <ButtonPrimary disabled>Loading...</ButtonPrimary>
+          ) : (
+            <ButtonPrimary onClick={() => generatePlanet()}>GENERATE PLANET</ButtonPrimary>
+          )
+        ) : null}
+      </div>
+    </MainWrapper>
   )
 }
 
-export default ConnectArgentx
+export default AuthScreen
