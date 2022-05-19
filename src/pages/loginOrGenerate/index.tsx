@@ -3,9 +3,11 @@ import React from 'react'
 import { ConnectWalletButton } from '~/components/ConnectWalletButton'
 
 import Image from 'next/image'
-import logo from 'src/assets/logo.png'
+import NoGameLogo from 'src/assets/NoGameLogo.png'
+import ufoLogo from 'src/assets/icons/UFO.svg'
 import { ButtonPrimary } from '~/components/Button'
 import { ColumnCenter } from '~/components/Column'
+import { RowCentered } from '~/components/Row'
 
 const MainWrapper = styled(ColumnCenter)`
   height: 80vh;
@@ -33,16 +35,31 @@ interface AuthScreenProps {
   address?: string
   loading: boolean
   walletConnectLoading: boolean
+  hasGeneratedPlanets: boolean | undefined
 }
 
-const AuthScreen = ({ address, generatePlanet, loading = true, walletConnectLoading }: AuthScreenProps) => {
+const AuthScreen = ({
+  address,
+  generatePlanet,
+  loading = true,
+  walletConnectLoading,
+  hasGeneratedPlanets = false,
+}: AuthScreenProps) => {
   return (
     <MainWrapper>
-      <div style={{ width: '300px' }}>
-        <Image src={logo} alt="logo" objectFit="contain" />
-      </div>
+      <RowCentered style={{ width: '300px' }}>
+        {address && !hasGeneratedPlanets && !loading ? (
+          <Image src={ufoLogo} alt="ufo" objectFit="contain" width={48} height={48} />
+        ) : (
+          <Image src={NoGameLogo} alt="logo" objectFit="contain" />
+        )}
+      </RowCentered>
 
-      <SubText>Manage your resources, discover new worlds and conquer the galaxy!</SubText>
+      <SubText>
+        {address && !hasGeneratedPlanets && !loading
+          ? 'Ready for lift off!'
+          : 'Manage your resources, discover new worlds and conquer the galaxy!'}
+      </SubText>
 
       <div>
         {!address ? (

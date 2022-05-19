@@ -57,6 +57,7 @@ const AuthController = ({ Component, pageProps }: AppProps) => {
         generatePlanet={() => generatePlanet()}
         walletConnectLoading={walletConnectLoading}
         loading={loading || !data}
+        hasGeneratedPlanets={hasGeneratedPlanets}
       />
     )
   }

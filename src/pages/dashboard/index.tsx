@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Image from 'next/image'
-import logo from 'src/assets/logo.png'
+import NoGameLogo from 'src/assets/NoGameLogo.png'
 
 const ImgWrapper = styled.div`
   width: 100%;
@@ -77,20 +77,20 @@ export default function Dashboard() {
   return (
     <>
       <Header>
-        <ImgWrapper>
-          <Image src={logo} alt="logo" objectFit="contain" width={395} height={80} />
-        </ImgWrapper>
+        {/* <ImgWrapper>
+          <Image src={NoGameLogo} alt="logo" objectFit="contain" width={395} height={80} />
+        </ImgWrapper> */}
       </Header>
 
       <BodyContainer>
-        <ElementSection>
+        {/* <ElementSection>
           <ElementBox>
             <ElementLabel>METAL</ElementLabel>
           </ElementBox>
           <ElementBox>Crystal</ElementBox>
           <ElementBox>Deuterium</ElementBox>
           <ElementBox>Energy </ElementBox>
-        </ElementSection>
+        </ElementSection> */}
       </BodyContainer>
     </>
   )
