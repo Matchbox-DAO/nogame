@@ -102,9 +102,7 @@ export default function Dashboard() {
 
       <BodyContainer>
         <SubBodyContainer>
-          <div style={{ flex: 1, justifyContent: 'flex-start', height: '100%', backgroundColor: 'green' }}>
-            <SideBar />
-          </div>
+          <SideBar />
           <Box>Box</Box>
           {/* <ElementSection>
           <ElementBox>
