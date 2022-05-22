@@ -50,17 +50,17 @@ const AuthController = ({ Component, pageProps }: AppProps) => {
     }
   }, [data])
 
-  // if (!account || !hasGeneratedPlanets || loading || walletConnectLoading) {
-  //   return (
-  //     <AuthScreen
-  //       address={account}
-  //       generatePlanet={() => generatePlanet()}
-  //       walletConnectLoading={walletConnectLoading}
-  //       loading={loading || !data}
-  //       hasGeneratedPlanets={hasGeneratedPlanets}
-  //     />
-  //   )
-  // }
+  if (!account || !hasGeneratedPlanets || loading || walletConnectLoading) {
+    return (
+      <AuthScreen
+        address={account}
+        generatePlanet={() => generatePlanet()}
+        walletConnectLoading={walletConnectLoading}
+        loading={loading || !data}
+        hasGeneratedPlanets={hasGeneratedPlanets}
+      />
+    )
+  }
 
   // return <Component {...pageProps} />
   return <Dashboard />

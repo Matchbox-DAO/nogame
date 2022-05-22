@@ -9,6 +9,7 @@ const LogoutContainer = styled.div`
   justify-content: center;
   align-content: center;
   align-items: center;
+  cursor: pointer;
 `
 
 const AstronautContainer = styled.div`
@@ -28,14 +29,15 @@ const HeaderWalletContainer = styled.div`
 
 interface WallerHeaderProps {
   account?: string
+  disconnect?: () => void
 }
 
-const WalletHeader = ({ account }: WallerHeaderProps) => {
+const WalletHeader = ({ account, disconnect }: WallerHeaderProps) => {
   const shortenedAddress = account ? `${account.substring(0, 6)}...${account.substring(59)}` : 'null'
   return (
     <HeaderWalletContainer>
       <LogoutContainer>
-        <Image width={24} height={24} src={logout} alt="logout" objectFit="fill" />
+        <Image onClick={disconnect} width={24} height={24} src={logout} alt="logout" objectFit="fill" />
       </LogoutContainer>
       <AstronautContainer>
         <Image src={astronaut} alt="astronaut" objectFit="contain" />

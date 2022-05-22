@@ -1,5 +1,6 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
-import { useStarknet } from '@starknet-react/core'
+import { InjectedConnector, useStarknet } from '@starknet-react/core'
 import WalletHeader from '~/components/SideBar/WallerHeader'
 import LogoAndRankContainer from '~/components/SideBar/LogoAndRankContainer'
 
@@ -12,11 +13,12 @@ const BodyContainer = styled.div`
 `
 
 const SideBar = () => {
-  const { account } = useStarknet()
+  const injected = useMemo(() => new InjectedConnector({ showModal: false }), [])
+  const { account, disconnect } = useStarknet()
 
   return (
     <BodyContainer>
-      <WalletHeader account={account} />
+      <WalletHeader account={account} disconnect={() => disconnect(injected)} />
       <LogoAndRankContainer />
       <ResourcesContainer />
     </BodyContainer>
