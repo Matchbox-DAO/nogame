@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 import NoGameLogo from 'src/assets/NoGameLogo.png'
+import SideBar from '~/components/SideBar'
 
 const ImgWrapper = styled.div`
   width: 100%;
@@ -27,6 +28,17 @@ const BodyContainer = styled.div`
   justify-items: center;
   align-items: center;
   padding: 20px;
+  height: auto;
+`
+
+const SubBodyContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  justify-items: center;
+  height: 100%;
+  border: 2px solid black;
+  align-items: stretch;
 `
 
 const ElementSection = styled.section`
@@ -73,6 +85,12 @@ const ElementLabel = styled.div`
   }
 `
 
+const Box = styled.div`
+  background-color: grey;
+  width: 900px;
+  height: 600px;
+`
+
 export default function Dashboard() {
   return (
     <>
@@ -83,7 +101,12 @@ export default function Dashboard() {
       </Header>
 
       <BodyContainer>
-        {/* <ElementSection>
+        <SubBodyContainer>
+          <div style={{ flex: 1, justifyContent: 'flex-start', height: '100%', backgroundColor: 'green' }}>
+            <SideBar />
+          </div>
+          <Box>Box</Box>
+          {/* <ElementSection>
           <ElementBox>
             <ElementLabel>METAL</ElementLabel>
           </ElementBox>
@@ -91,6 +114,7 @@ export default function Dashboard() {
           <ElementBox>Deuterium</ElementBox>
           <ElementBox>Energy </ElementBox>
         </ElementSection> */}
+        </SubBodyContainer>
       </BodyContainer>
     </>
   )
