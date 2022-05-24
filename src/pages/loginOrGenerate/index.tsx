@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import React from 'react'
+import React, { FC } from 'react'
 import { ConnectWalletButton } from '~/components/ConnectWalletButton'
 
 import Image from 'next/image'
@@ -8,6 +8,7 @@ import ufoLogo from 'src/assets/icons/UFO.svg'
 import { ButtonPrimary } from '~/components/Button'
 import { ColumnCenter } from '~/components/Column'
 import { RowCentered } from '~/components/Row'
+import SideBar from '~/components/SideBar'
 
 const MainWrapper = styled(ColumnCenter)`
   height: 80vh;
@@ -30,6 +31,13 @@ const SubText = styled.div`
   opacity: 0.5;
 `
 
+const GeneratePlanetWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100vh;
+`
+
 interface AuthScreenProps {
   generatePlanet: () => void
   address?: string
@@ -38,6 +46,10 @@ interface AuthScreenProps {
   hasGeneratedPlanets: boolean | undefined
 }
 
+type ConnectWalletViewProps = Omit<AuthScreenProps, 'generatePlanet' | 'hasGeneratedPlanets'>
+
+type GeneratePlanetViewProps = Omit<AuthScreenProps, 'walletConnectLoading' | 'hasGeneratedPlanets'>
+
 const AuthScreen = ({
   address,
   generatePlanet,
@@ -45,21 +57,21 @@ const AuthScreen = ({
   walletConnectLoading,
   hasGeneratedPlanets = false,
 }: AuthScreenProps) => {
+  if (address && !hasGeneratedPlanets) {
+    return <GeneratePlanetView address={address} loading={loading} generatePlanet={generatePlanet} />
+  }
+
+  return <ConnectWalletView address={address} loading={loading} walletConnectLoading={walletConnectLoading} />
+}
+
+const ConnectWalletView: FC<ConnectWalletViewProps> = ({ address, loading, walletConnectLoading }) => {
   return (
     <MainWrapper>
       <RowCentered style={{ width: '300px' }}>
-        {address && !hasGeneratedPlanets && !loading ? (
-          <Image src={ufoLogo} alt="ufo" objectFit="contain" width={48} height={48} />
-        ) : (
-          <Image src={NoGameLogo} alt="logo" objectFit="contain" />
-        )}
+        <Image src={NoGameLogo} alt="logo" objectFit="contain" />
       </RowCentered>
 
-      <SubText>
-        {address && !hasGeneratedPlanets && !loading
-          ? 'Ready for lift off!'
-          : 'Manage your resources, discover new worlds and conquer the galaxy!'}
-      </SubText>
+      <SubText>Manage your resources, discover new worlds and conquer the galaxy!</SubText>
 
       <div>
         {!address ? (
@@ -69,16 +81,31 @@ const AuthScreen = ({
             <ConnectWalletButton />
           )
         ) : null}
+      </div>
+    </MainWrapper>
+  )
+}
 
-        {address ? (
-          loading ? (
+const GeneratePlanetView: FC<GeneratePlanetViewProps> = ({ address, generatePlanet, loading }) => {
+  return (
+    <GeneratePlanetWrapper>
+      <SideBar />
+      <MainWrapper>
+        <RowCentered style={{ width: '300px' }}>
+          <Image src={ufoLogo} alt="ufo" objectFit="contain" width={48} height={48} />
+        </RowCentered>
+
+        <SubText>Ready for lift off!</SubText>
+
+        <div>
+          {loading ? (
             <ButtonPrimary disabled>Loading...</ButtonPrimary>
           ) : (
             <ButtonPrimary onClick={() => generatePlanet()}>GENERATE PLANET</ButtonPrimary>
-          )
-        ) : null}
-      </div>
-    </MainWrapper>
+          )}
+        </div>
+      </MainWrapper>
+    </GeneratePlanetWrapper>
   )
 }
 
