@@ -7,7 +7,7 @@ import LogoAndRankContainer from '~/components/SideBar/LogoAndRankContainer'
 import ResourcesContainer from '~/components/SideBar/Resources'
 
 const BodyContainer = styled.div`
-  width: 250px;
+  flex: 1;
   height: 100%;
   background-color: #192125;
 `

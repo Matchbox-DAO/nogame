@@ -22,19 +22,13 @@ const DashboardContainer = styled.div`
 const Header = styled.div``
 
 const BodyContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-items: center;
-  align-items: center;
-  padding: 20px;
-  height: auto;
+  height: 100vh;
+  width: 100vw;
 `
 
 const SubBodyContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
   justify-items: center;
   height: 100%;
   border: 2px solid black;
@@ -85,10 +79,10 @@ const ElementLabel = styled.div`
   }
 `
 
-const Box = styled.div`
-  background-color: grey;
-  width: 900px;
-  height: 600px;
+const MainScreen = styled.div`
+  background-color: #151a1e;
+  width: 100%;
+  flex: 5;
 `
 
 export default function Dashboard() {
@@ -103,7 +97,7 @@ export default function Dashboard() {
       <BodyContainer>
         <SubBodyContainer>
           <SideBar />
-          <Box>Box</Box>
+          <MainScreen>Box</MainScreen>
           {/* <ElementSection>
           <ElementBox>
             <ElementLabel>METAL</ElementLabel>
