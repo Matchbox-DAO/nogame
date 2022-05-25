@@ -1,20 +1,17 @@
 import styled, { css } from 'styled-components'
-import Image from 'next/image'
-import NoGameLogo from 'src/assets/NoGameLogo.png'
 import SideBar from '~/components/SideBar'
 import { PlanetSection } from './PlanetSection'
 import { ResourcesSection } from './ResourcesSection'
 
 const GameContainer = styled.div`
   display: grid;
-  grid-template-rows: 1.05fr 2fr;
+  grid-template-rows: 34% auto;
   justify-items: center;
   align-items: center;
   height: 100%;
+  max-height: 100vh;
   flex: 5;
 `
-
-const Header = styled.div``
 
 const MainContainer = styled.div`
   height: 100vh;
@@ -32,7 +29,6 @@ const SubBodyContainer = styled.section<{ border?: boolean }>`
   justify-items: center;
   height: 100%;
   width: 100%;
-  align-items: center;
   background-color: #151a1e;
 
   ${({ border }) =>
@@ -50,7 +46,7 @@ export default function Dashboard() {
         <SubBodyContainer>
           <PlanetSection />
         </SubBodyContainer>
-        <SubBodyContainer border>
+        <SubBodyContainer>
           <ResourcesSection />
         </SubBodyContainer>
       </GameContainer>
