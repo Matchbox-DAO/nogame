@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import SideBar from '~/components/SideBar'
-import { PlanetSection } from './PlanetSection'
-import { ResourcesSection } from './ResourcesSection'
+import { PlanetSection } from '../../components/PlanetSection'
+import { ResourcesSection } from '../../components/ResourcesSection'
 
 const GameContainer = styled.div`
   display: grid;
