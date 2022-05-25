@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 export const ResourcesTabs = styled(Tabs)`
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 export const ResourcesTabList = styled(TabList)`
@@ -46,11 +48,10 @@ export const ResourceTab = styled(Tab)`
 
 export const StyledTabPanel = styled(TabPanel)`
   width: 100%;
-  /* height: 100%; */
   background: #1e2327;
   display: flex;
 
   &.react-tabs__tab-panel--selected {
-    /* height: 100%; */
+    height: 100%;
   }
 `
