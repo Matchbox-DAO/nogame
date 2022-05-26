@@ -8,11 +8,11 @@ import { S2MTransactionManagerProvider } from '~/providers/transaction'
 import { useGameContract } from '~/hooks/game'
 import Popups from '~/components/Popups'
 import { AppWrapper } from '~/components/Core/AppWrapper'
-import ConnectArgentx from '~/pages/loginOrGenerate'
 import useGeneratePlanet from '~/hooks/calls/useGeneratePlanet'
 import AuthScreen from '~/pages/loginOrGenerate'
 import { uint256 } from 'starknet'
 import Dashboard from './dashboard'
+import 'react-tabs/style/react-tabs.css'
 
 const AuthController = ({ Component, pageProps }: AppProps) => {
   const { account, connect } = useStarknet()
