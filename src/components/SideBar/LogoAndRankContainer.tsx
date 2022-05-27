@@ -59,9 +59,11 @@ const LogoAndRankContainer = () => {
     args: [account],
   })
 
+  const dataToNumber = (value: any) => new BigNumber(uint256.uint256ToBN(uint256.bnToUint256(value))).toNumber()
+
   const points = useMemo(() => {
     if (data) {
-      return new BigNumber(uint256.uint256ToBN(data['points'])).toNumber()
+      return dataToNumber(data['points'])
     }
   }, [data])
 
@@ -78,13 +80,13 @@ const LogoAndRankContainer = () => {
           </div>
           {points ?? 'N/A'}
         </RankLineContainer>
-        <RankLineContainer>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Image src={trophy} alt="trophy" objectFit="contain" />
-            <TitleContainer>Score</TitleContainer>
-          </div>
-          {points ?? 'N/A'}
-        </RankLineContainer>
+        {/*<RankLineContainer>*/}
+        {/*  <div style={{ display: 'flex', alignItems: 'center' }}>*/}
+        {/*    <Image src={trophy} alt="trophy" objectFit="contain" />*/}
+        {/*    <TitleContainer>Score</TitleContainer>*/}
+        {/*  </div>*/}
+        {/*  {points ?? 'N/A'}*/}
+        {/*</RankLineContainer>*/}
       </RankContainer>
     </LogoContainer>
   )

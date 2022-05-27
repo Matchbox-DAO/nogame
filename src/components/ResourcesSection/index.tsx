@@ -42,9 +42,12 @@ export const ResourcesSection: FC = () => {
 
       <ResourceTabPanel />
       <FacilitiesTabPanel />
-      <ResourceTabPanel />
-      <ResourceTabPanel />
-      <ResourceTabPanel />
+      <FacilitiesTabPanel />
+      <FacilitiesTabPanel />
+      <FacilitiesTabPanel />
+      {/*<ResourceTabPanel />*/}
+      {/*<ResourceTabPanel />*/}
+      {/*<ResourceTabPanel />*/}
     </ResourcesTabs>
   )
 }
