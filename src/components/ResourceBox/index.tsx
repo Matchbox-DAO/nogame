@@ -8,6 +8,7 @@ import useUpgradeResourceStart, { ResourceType } from '~/hooks/calls/useUpgradeR
 
 import plus from '~/assets/icons/Plus.svg'
 import nullIcon from '~/assets/icons/Null.svg'
+import Column from '../Column'
 
 const Box = styled.div<{ isUpgradable?: boolean }>`
   width: 100%;
@@ -20,6 +21,7 @@ const Box = styled.div<{ isUpgradable?: boolean }>`
   padding: 10px;
   border: 2px solid ${(props) => (props.isUpgradable ? '#6CBD6A' : '#402F2C')};
   background-color: ${(props) => (props.isUpgradable ? '#394639' : '#151A1E')};
+  border-radius: 4px;
 `
 
 const Title = styled.div`
@@ -33,19 +35,26 @@ const InfoContainer = styled.div`
   align-items: center;
   justify-content: space-between;
 `
-const ResourceContainer = styled.div`
+const ResourceContainer = styled(Column)`
   width: 50px;
-  align-items: center;
-  text-align: center;
+  text-align: left;
+  gap: 3px;
 `
 
 const NumberContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  gap: 4px;
+  align-items: center;
+  font-size: 14px;
+  line-height: 18.2px;
+  letter-spacing: 2%;
 `
 
 const ResourceTitle = styled.div`
   color: grey;
+  font-weight: 700;
+  font-size: 12px;
 `
 
 interface Props {
