@@ -34,23 +34,23 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
     args: [account],
   })
 
-  const { data: structreLevels } = useStarknetCall({
+  const { data: structureLevels } = useStarknetCall({
     contract: gameContract,
     method: 'get_structures_levels',
     args: [account],
   })
 
   const resourceLevels = useMemo(() => {
-    if (structreLevels) {
+    if (structureLevels) {
       return {
-        metal: dataToNumber(structreLevels['metal_mine']),
-        crystal: dataToNumber(structreLevels['crystal_mine']),
-        deuterium: dataToNumber(structreLevels['deuterium_mine']),
-        solarPlant: dataToNumber(structreLevels['solar_plant']),
-        robotFactory: dataToNumber(structreLevels['robot_factory']),
+        metal: dataToNumber(structureLevels['metal_mine']),
+        crystal: dataToNumber(structureLevels['crystal_mine']),
+        deuterium: dataToNumber(structureLevels['deuterium_mine']),
+        solarPlant: dataToNumber(structureLevels['solar_plant']),
+        robotFactory: dataToNumber(structureLevels['robot_factory']),
       }
     }
-  }, [structreLevels])
+  }, [structureLevels])
 
   const costUpgrade = useMemo(() => {
     if (data) {
@@ -85,14 +85,14 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
         functionCallName="deuterium"
         level={resourceLevels?.deuterium}
         costUpdate={costUpgrade?.deuterium}
-        isUpgradable={points && costUpgrade && points.crystal >= costUpgrade.crystal}
+        isUpgradable={points && costUpgrade && points.deuterium >= costUpgrade.deuterium}
       />
       <ResourceBox
         title="Solar Plant"
         functionCallName="solar_plant"
         level={resourceLevels?.solarPlant}
         costUpdate={costUpgrade?.solarPlant}
-        isUpgradable={points && costUpgrade && points.crystal >= costUpgrade.crystal}
+        isUpgradable={points && costUpgrade && points.energy >= costUpgrade.solarPlant}
       />
       <ResourceBox
         title="Solar Satellites"
