@@ -5,6 +5,7 @@ import { useGameContract } from '~/hooks/game'
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { uint256 } from 'starknet'
+import { dataToNumber } from '~/utils/utils'
 
 export const ResourceTabPanel = ({ children, ...rest }: { children?: React.ReactNode }) => {
   const { account } = useStarknet()
@@ -38,8 +39,6 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
     method: 'get_structures_levels',
     args: [account],
   })
-
-  const dataToNumber = (value: any) => new BigNumber(uint256.uint256ToBN(uint256.bnToUint256(value))).toNumber()
 
   const resourceLevels = useMemo(() => {
     if (structreLevels) {

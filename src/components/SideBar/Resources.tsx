@@ -15,6 +15,7 @@ import coins from '../../assets/icons/Coins.svg'
 import gem from '../../assets/icons/Gem.svg'
 import atom from '../../assets/icons/Atom.svg'
 import bolt from '../../assets/icons/Bolt.svg'
+import { dataToNumber } from '~/utils/utils'
 
 const Container = styled.div`
   //width: 250px;
@@ -87,10 +88,10 @@ const ResourcesContainer = () => {
   const points = useMemo(() => {
     if (data) {
       return {
-        metal: new BigNumber(uint256.uint256ToBN(data['metal'])).toNumber(),
-        crystal: new BigNumber(uint256.uint256ToBN(data['crystal'])).toNumber(),
-        deuterium: new BigNumber(uint256.uint256ToBN(data['deuterium'])).toNumber(),
-        energy: new BigNumber(uint256.uint256ToBN(data['energy'])).toNumber(),
+        metal: dataToNumber(data['metal']),
+        crystal: dataToNumber(data['crystal']),
+        deuterium: dataToNumber(data['deuterium']),
+        energy: dataToNumber(data['energy']),
       }
     }
   }, [data])

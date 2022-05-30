@@ -2,12 +2,10 @@ import styled from 'styled-components'
 import Image from 'next/image'
 import nogame from '~/assets/NoGameLogo.png'
 import ranking from '~/assets/icons/Ranking.svg'
-import trophy from '~/assets/icons/Trophy.svg'
 import { useStarknet, useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import { useMemo } from 'react'
-import { BigNumber } from 'bignumber.js'
-import { uint256 } from 'starknet'
+import { dataToNumber } from '~/utils/utils'
 
 const LogoContainer = styled.div`
   display: flex;
@@ -58,8 +56,6 @@ const LogoAndRankContainer = () => {
     method: 'player_points',
     args: [account],
   })
-
-  const dataToNumber = (value: any) => new BigNumber(uint256.uint256ToBN(uint256.bnToUint256(value))).toNumber()
 
   const points = useMemo(() => {
     if (data) {
