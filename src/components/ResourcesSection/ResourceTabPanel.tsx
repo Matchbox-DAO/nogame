@@ -3,9 +3,7 @@ import ResourceBox from '~/components/ResourceBox'
 import { useStarknet, useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import { useMemo } from 'react'
-import { BigNumber } from 'bignumber.js'
-import { uint256 } from 'starknet'
-import { dataToNumber } from '~/utils/utils'
+import { dataToNumber } from '~/utils'
 
 export const ResourceTabPanel = ({ children, ...rest }: { children?: React.ReactNode }) => {
   const { account } = useStarknet()
@@ -20,10 +18,10 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
   const points = useMemo(() => {
     if (resourcesAvailable) {
       return {
-        metal: new BigNumber(uint256.uint256ToBN(resourcesAvailable['metal'])).toNumber(),
-        crystal: new BigNumber(uint256.uint256ToBN(resourcesAvailable['crystal'])).toNumber(),
-        deuterium: new BigNumber(uint256.uint256ToBN(resourcesAvailable['deuterium'])).toNumber(),
-        energy: new BigNumber(uint256.uint256ToBN(resourcesAvailable['energy'])).toNumber(),
+        metal: dataToNumber(resourcesAvailable['metal']),
+        crystal: dataToNumber(resourcesAvailable['crystal']),
+        deuterium: dataToNumber(resourcesAvailable['deuterium']),
+        energy: dataToNumber(resourcesAvailable['energy']),
       }
     }
   }, [resourcesAvailable])

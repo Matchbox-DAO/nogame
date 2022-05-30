@@ -15,7 +15,7 @@ import coins from '../../assets/icons/Coins.svg'
 import gem from '../../assets/icons/Gem.svg'
 import atom from '../../assets/icons/Atom.svg'
 import bolt from '../../assets/icons/Bolt.svg'
-import { dataToNumber } from '~/utils/utils'
+import { dataToNumber } from '~/utils'
 
 const Container = styled.div`
   //width: 250px;

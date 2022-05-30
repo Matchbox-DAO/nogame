@@ -5,7 +5,7 @@ import ranking from '~/assets/icons/Ranking.svg'
 import { useStarknet, useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import { useMemo } from 'react'
-import { dataToNumber } from '~/utils/utils'
+import { dataToNumber } from '~/utils'
 
 const LogoContainer = styled.div`
   display: flex;
