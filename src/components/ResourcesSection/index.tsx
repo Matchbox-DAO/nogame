@@ -153,8 +153,8 @@ export const ResourcesSection: FC = () => {
         costUpgrade={costUpgrade}
       />
       <EmptyTabPanel />
-      <FacilitiesTabPanel />
-      <FacilitiesTabPanel />
+      <EmptyTabPanel />
+      <EmptyTabPanel />
     </ResourcesTabs>
   )
 }
