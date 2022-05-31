@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
-import logout from '~/assets/icons/Log Out.svg'
 import astronaut from '~/assets/icons/Astronaut.svg'
+import { LogoutIcon } from '~/components/Icons/Logout'
 
 const LogoutContainer = styled.div`
   margin: 8px 16px;
@@ -37,7 +37,9 @@ const WalletHeader = ({ account, disconnect }: WallerHeaderProps) => {
   return (
     <HeaderWalletContainer>
       <LogoutContainer>
-        <Image onClick={disconnect} width={24} height={24} src={logout} alt="logout" objectFit="fill" />
+        <div onClick={disconnect}>
+          <LogoutIcon />
+        </div>
       </LogoutContainer>
       <AstronautContainer>
         <Image src={astronaut} alt="astronaut" objectFit="contain" />

@@ -15,6 +15,7 @@ const GameContainer = styled.div`
 
 const MainContainer = styled.div`
   height: 100vh;
+  overflow: hidden;
   width: 100vw;
   display: flex;
   flex-direction: row;

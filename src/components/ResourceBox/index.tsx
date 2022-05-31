@@ -12,16 +12,27 @@ import Column from '../Column'
 
 const Box = styled.div<{ isUpgradable?: boolean }>`
   width: 100%;
-  height: 200px;
+  max-height: 70px;
+  display: flex;
+  flex-direction: row;
+  //align-items: center;
+  //justify-content: space-between;
+  margin-bottom: 10px;
+  //padding: 10px;
+  border: 2px solid ${(props) => (props.isUpgradable ? '#6CBD6A' : '#402F2C')};
+  background-color: ${(props) => (props.isUpgradable ? '#394639' : '#151A1E')};
+  border-radius: 4px;
+  overflow: hidden;
+`
+
+const SubBox = styled.div`
+  width: 100%;
+  max-height: 200px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
   padding: 10px;
-  border: 2px solid ${(props) => (props.isUpgradable ? '#6CBD6A' : '#402F2C')};
-  background-color: ${(props) => (props.isUpgradable ? '#394639' : '#151A1E')};
-  border-radius: 4px;
 `
 
 const Title = styled.div`
@@ -29,7 +40,7 @@ const Title = styled.div`
 `
 
 const InfoContainer = styled.div`
-  width: 300px;
+  width: 600px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -48,7 +59,6 @@ const NumberContainer = styled.div`
   align-items: center;
   font-size: 14px;
   line-height: 18.2px;
-  letter-spacing: 2%;
 `
 
 const ResourceTitle = styled.div`
@@ -57,57 +67,85 @@ const ResourceTitle = styled.div`
   font-size: 12px;
 `
 
+const ImageContainer = styled.div`
+  width: 70px;
+`
+
 interface Props {
+  img: any
   title: string
   functionCallName: ResourceType
   level?: number
-  // time: number
-  costUpdate?: number
+  time: number
+  costUpdate?: { metal: number; crystal: number; deuterium: number }
   isUpgradable?: boolean
 }
 
-const ResourceBox = ({ title, level, isUpgradable, costUpdate, functionCallName }: Props) => {
+const ResourceBox = ({ img, title, level, isUpgradable, costUpdate, functionCallName, time }: Props) => {
   const upgrade = useUpgradeResourceStart(functionCallName)
   return (
     <Box isUpgradable={isUpgradable}>
-      <Title>{title}</Title>
-      <InfoContainer>
-        <ResourceContainer>
-          <ResourceTitle>LEVEL</ResourceTitle>
-          <NumberContainer>
-            <LayerGroup />
-            {level}
-          </NumberContainer>
-        </ResourceContainer>
-        <ResourceContainer>
-          <ResourceTitle>TIME</ResourceTitle>
-          <NumberContainer>
-            <Clock />
-            {level !== undefined ? `${level}m` : ''}
-          </NumberContainer>
-        </ResourceContainer>
-        <ResourceContainer>
-          <ResourceTitle>COST</ResourceTitle>
-          <NumberContainer>
-            <Coins />
-            {costUpdate}
-          </NumberContainer>
-        </ResourceContainer>
-      </InfoContainer>
-      <div style={{ width: 300 }}>
-        <ButtonPrimary
-          disabled={!isUpgradable}
-          onClick={() => upgrade()}
-          customColor={isUpgradable ? undefined : '#402F2C'}
-        >
-          <div style={{ display: 'flex', flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-            <div style={{ width: 20, height: 20 }}>
-              {isUpgradable ? <Image src={plus} alt="plus" /> : <Image src={nullIcon} alt="nullIcon" />}
+      <ImageContainer>
+        <Image src={img} alt={title} />
+      </ImageContainer>
+      <SubBox>
+        <Title>{title}</Title>
+        <InfoContainer>
+          <ResourceContainer>
+            <ResourceTitle>LEVEL</ResourceTitle>
+            <NumberContainer>
+              <LayerGroup />
+              {level}
+            </NumberContainer>
+          </ResourceContainer>
+          <ResourceContainer>
+            <ResourceTitle>TIME COMPLETION</ResourceTitle>
+            <NumberContainer>
+              <Clock />
+              {time !== undefined ? `${time}m` : ''}
+            </NumberContainer>
+          </ResourceContainer>
+          <ResourceContainer>
+            <ResourceTitle>COST METAL</ResourceTitle>
+            <NumberContainer>
+              <Coins />
+              {costUpdate?.metal}
+            </NumberContainer>
+          </ResourceContainer>
+          <ResourceContainer>
+            <ResourceTitle>COST CRYSTAL</ResourceTitle>
+            <NumberContainer>
+              <Coins />
+              {costUpdate?.crystal}
+            </NumberContainer>
+          </ResourceContainer>
+          <ResourceContainer>
+            <ResourceTitle>COST DEUTERIUM</ResourceTitle>
+            <NumberContainer>
+              <Coins />
+              {costUpdate?.deuterium}
+            </NumberContainer>
+          </ResourceContainer>
+        </InfoContainer>
+        <div style={{ width: 300 }}>
+          <ButtonPrimary
+            disabled={!isUpgradable}
+            onClick={() => upgrade()}
+            customColor={isUpgradable ? undefined : '#402F2C'}
+          >
+            <div style={{ display: 'flex', flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
+              <div style={{ width: 20, height: 20 }}>
+                {isUpgradable ? <Image src={plus} alt="plus" /> : <Image src={nullIcon} alt="nullIcon" />}
+              </div>
+              {isUpgradable ? (
+                <div style={{ width: 70 }}>Upgrade</div>
+              ) : (
+                <div style={{ width: 130 }}>Need Resources</div>
+              )}
             </div>
-            {isUpgradable ? <div style={{ width: 70 }}>Upgrade</div> : <div style={{ width: 130 }}>Need Resources</div>}
-          </div>
-        </ButtonPrimary>
-      </div>
+          </ButtonPrimary>
+        </div>
+      </SubBox>
     </Box>
   )
 }

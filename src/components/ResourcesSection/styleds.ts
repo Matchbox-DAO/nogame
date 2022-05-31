@@ -56,7 +56,6 @@ export const StyledTabPanel = styled(TabPanel)`
 
   &.react-tabs__tab-panel--selected {
     //height: 300px;
-    height: calc(100vh - 49vh);
     overflow: auto;
     //min-height: 200px;
   }
