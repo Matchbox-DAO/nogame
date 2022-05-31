@@ -1,127 +1,29 @@
 import { StyledTabPanel } from './styleds'
 import ResourceBox from '~/components/ResourceBox'
-import { useStarknet, useStarknetCall } from '@starknet-react/core'
-import { useGameContract } from '~/hooks/game'
-import { useCallback, useMemo } from 'react'
-import { dataToNumber } from '~/utils'
-import { differenceInMinutes, fromUnixTime } from 'date-fns'
 
 import MetalImg from '~/assets/resources/metal.jpg'
 import CrystalImg from '~/assets/resources/crystal.jpg'
 import DeuteriumImg from '~/assets/resources/deuterium.jpg'
 import SolarPlantImg from '~/assets/resources/solar_plant.jpg'
-import RobotImg from '~/assets/resources/solar_satellite.jpg'
+import { CostUpgrade, ResourceLevels, Points, EndTimeCompletion } from '~/utils/types'
+import { calculEnoughResources } from '~/utils'
 
-export const ResourceTabPanel = ({ children, ...rest }: { children?: React.ReactNode }) => {
-  const { account } = useStarknet()
-  const { contract: gameContract } = useGameContract()
+interface Props {
+  endTimeCompletion?: EndTimeCompletion
+  points?: Points
+  resourceLevels?: ResourceLevels
+  costUpgrade?: CostUpgrade
+}
 
-  const { data: resourcesAvailable } = useStarknetCall({
-    contract: gameContract,
-    method: 'resources_available',
-    args: [account],
-  })
-
-  const { data: timeCompletion } = useStarknetCall({
-    contract: gameContract,
-    method: 'build_time_completion',
-    args: [account],
-  })
-
-  const { data } = useStarknetCall({
-    contract: gameContract,
-    method: 'get_structures_upgrade_cost',
-    args: [account],
-  })
-
-  const { data: structureLevels } = useStarknetCall({
-    contract: gameContract,
-    method: 'get_structures_levels',
-    args: [account],
-  })
-
-  const endTimeCompletion = useMemo(() => {
-    if (timeCompletion) {
-      const end = fromUnixTime(dataToNumber(timeCompletion['time_end']))
-
-      const timeDifferenceInMinutes = differenceInMinutes(end, new Date())
-
-      return {
-        resourceId: dataToNumber(timeCompletion['building_id']),
-        timeEnd: timeDifferenceInMinutes > 0 ? timeDifferenceInMinutes : 0,
-      }
-    }
-  }, [timeCompletion])
-
-  const points = useMemo(() => {
-    if (resourcesAvailable) {
-      return {
-        metal: dataToNumber(resourcesAvailable['metal']),
-        crystal: dataToNumber(resourcesAvailable['crystal']),
-        deuterium: dataToNumber(resourcesAvailable['deuterium']),
-        energy: dataToNumber(resourcesAvailable['energy']),
-      }
-    }
-  }, [resourcesAvailable])
-
-  const resourceLevels = useMemo(() => {
-    if (structureLevels) {
-      return {
-        metal: dataToNumber(structureLevels['metal_mine']),
-        crystal: dataToNumber(structureLevels['crystal_mine']),
-        deuterium: dataToNumber(structureLevels['deuterium_mine']),
-        solarPlant: dataToNumber(structureLevels['solar_plant']),
-        robotFactory: dataToNumber(structureLevels['robot_factory']),
-      }
-    }
-  }, [structureLevels])
-
-  const costUpgrade = useMemo(() => {
-    if (data) {
-      return {
-        metal: {
-          metal: dataToNumber(data['metal_mine'].metal),
-          crystal: dataToNumber(data['metal_mine'].crystal),
-          deuterium: dataToNumber(data['metal_mine'].deuterium),
-        },
-        crystal: {
-          metal: dataToNumber(data['crystal_mine'].metal),
-          crystal: dataToNumber(data['crystal_mine'].crystal),
-          deuterium: dataToNumber(data['crystal_mine'].deuterium),
-        },
-        deuterium: {
-          metal: dataToNumber(data['deuterium_mine'].metal),
-          crystal: dataToNumber(data['deuterium_mine'].crystal),
-          deuterium: dataToNumber(data['deuterium_mine'].deuterium),
-        },
-        solarPlant: {
-          metal: dataToNumber(data['solar_plant'].metal),
-          crystal: dataToNumber(data['solar_plant'].crystal),
-          deuterium: dataToNumber(data['solar_plant'].deuterium),
-        },
-        robotFactory: {
-          metal: dataToNumber(data['robot_factory'].metal),
-          crystal: dataToNumber(data['robot_factory'].crystal),
-          deuterium: dataToNumber(data['robot_factory'].deuterium),
-        },
-      }
-    }
-  }, [data])
-
-  const calculEnoughResources = (res: { metal: number; crystal: number; deuterium: number }) => {
-    if (!points) {
-      return false
-    }
-
-    return points.metal - res.metal >= 0 && points.crystal - res.crystal >= 0 && points.deuterium - res.deuterium >= 0
-  }
-
+export const ResourceTabPanel = ({ endTimeCompletion, points, resourceLevels, costUpgrade, ...rest }: Props) => {
   const getEndTime = (resourceId: number) => {
     if (endTimeCompletion) {
       return endTimeCompletion.resourceId === resourceId ? endTimeCompletion.timeEnd : 0
     }
     return 0
   }
+
+  const isUpgrading = Boolean(endTimeCompletion?.timeEnd)
 
   return (
     <StyledTabPanel {...rest}>
@@ -131,8 +33,9 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
         functionCallName="metal"
         level={resourceLevels?.metal}
         time={getEndTime(1)}
+        isUpgrading={isUpgrading}
         costUpdate={costUpgrade?.metal}
-        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.metal)}
+        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.metal, points)}
       />
       <ResourceBox
         img={CrystalImg}
@@ -141,7 +44,8 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
         level={resourceLevels?.crystal}
         time={getEndTime(2)}
         costUpdate={costUpgrade?.crystal}
-        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.crystal)}
+        isUpgrading={isUpgrading}
+        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.crystal, points)}
       />
       <ResourceBox
         img={DeuteriumImg}
@@ -150,7 +54,8 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
         level={resourceLevels?.deuterium}
         time={getEndTime(3)}
         costUpdate={costUpgrade?.deuterium}
-        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.deuterium)}
+        isUpgrading={isUpgrading}
+        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.deuterium, points)}
       />
       <ResourceBox
         img={SolarPlantImg}
@@ -159,16 +64,8 @@ export const ResourceTabPanel = ({ children, ...rest }: { children?: React.React
         level={resourceLevels?.solarPlant}
         time={getEndTime(4)}
         costUpdate={costUpgrade?.solarPlant}
-        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.solarPlant)}
-      />
-      <ResourceBox
-        img={RobotImg}
-        title="Solar Satellites"
-        functionCallName="robot_factory"
-        level={resourceLevels?.robotFactory}
-        time={getEndTime(5)}
-        costUpdate={costUpgrade?.robotFactory}
-        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.robotFactory)}
+        isUpgrading={isUpgrading}
+        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.solarPlant, points)}
       />
     </StyledTabPanel>
   )

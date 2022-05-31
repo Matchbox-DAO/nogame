@@ -1,5 +1,10 @@
 import { StyledTabPanel } from './styleds'
 import styled from 'styled-components'
+import { CostUpgrade, EndTimeCompletion, Points, ResourceLevels } from '~/utils/types'
+import ResourceBox from '~/components/ResourceBox'
+import MetalImg from '~/assets/resources/metal.jpg'
+import RobotImg from '~/assets/resources/solar_satellite.jpg'
+import { calculEnoughResources } from '~/utils'
 
 const EmptyBox = styled.div`
   display: flex;
@@ -20,13 +25,35 @@ const EmptyContainer = styled.div`
   width: 100%;
   height: 100%;
 `
+interface Props {
+  endTimeCompletion?: EndTimeCompletion
+  points?: Points
+  resourceLevels?: ResourceLevels
+  costUpgrade?: CostUpgrade
+}
 
-export const FacilitiesTabPanel = ({ children, ...rest }: { children?: React.ReactNode }) => {
+export const FacilitiesTabPanel = ({ endTimeCompletion, points, resourceLevels, costUpgrade, ...rest }: Props) => {
+  const getEndTime = (resourceId: number) => {
+    if (endTimeCompletion) {
+      return endTimeCompletion.resourceId === resourceId ? endTimeCompletion.timeEnd : 0
+    }
+    return 0
+  }
+
+  const isUpgrading = Boolean(endTimeCompletion?.timeEnd)
+
   return (
     <StyledTabPanel {...rest}>
-      <EmptyContainer>
-        <EmptyBox>Coming soon</EmptyBox>
-      </EmptyContainer>
+      <ResourceBox
+        img={RobotImg}
+        title="Robot Factory"
+        functionCallName="robot_factory"
+        level={resourceLevels?.robotFactory}
+        time={getEndTime(5)}
+        costUpdate={costUpgrade?.robotFactory}
+        isUpgrading={isUpgrading}
+        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.robotFactory, points)}
+      />
     </StyledTabPanel>
   )
 }

@@ -79,12 +79,15 @@ interface Props {
   time: number
   costUpdate?: { metal: number; crystal: number; deuterium: number }
   isUpgradable?: boolean
+  isUpgrading?: boolean
 }
 
-const ResourceBox = ({ img, title, level, isUpgradable, costUpdate, functionCallName, time }: Props) => {
+const ResourceBox = ({ img, title, level, isUpgradable, isUpgrading, costUpdate, functionCallName, time }: Props) => {
   const upgrade = useUpgradeResourceStart(functionCallName)
+  const isValidButton = isUpgrading ? false : isUpgradable
+
   return (
-    <Box isUpgradable={isUpgradable}>
+    <Box isUpgradable={isValidButton}>
       <ImageContainer>
         <Image src={img} alt={title} />
       </ImageContainer>
@@ -106,21 +109,21 @@ const ResourceBox = ({ img, title, level, isUpgradable, costUpdate, functionCall
             </NumberContainer>
           </ResourceContainer>
           <ResourceContainer>
-            <ResourceTitle>COST METAL</ResourceTitle>
+            <ResourceTitle>METAL COST</ResourceTitle>
             <NumberContainer>
               <Coins />
               {costUpdate?.metal}
             </NumberContainer>
           </ResourceContainer>
           <ResourceContainer>
-            <ResourceTitle>COST CRYSTAL</ResourceTitle>
+            <ResourceTitle>CRYSTAL COST</ResourceTitle>
             <NumberContainer>
               <Coins />
               {costUpdate?.crystal}
             </NumberContainer>
           </ResourceContainer>
           <ResourceContainer>
-            <ResourceTitle>COST DEUTERIUM</ResourceTitle>
+            <ResourceTitle>DEUTERIUM COST</ResourceTitle>
             <NumberContainer>
               <Coins />
               {costUpdate?.deuterium}
@@ -129,18 +132,18 @@ const ResourceBox = ({ img, title, level, isUpgradable, costUpdate, functionCall
         </InfoContainer>
         <div style={{ width: 300 }}>
           <ButtonPrimary
-            disabled={!isUpgradable}
+            disabled={!isValidButton}
             onClick={() => upgrade()}
-            customColor={isUpgradable ? undefined : '#402F2C'}
+            customColor={isValidButton ? undefined : '#402F2C'}
           >
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
               <div style={{ width: 20, height: 20 }}>
-                {isUpgradable ? <Image src={plus} alt="plus" /> : <Image src={nullIcon} alt="nullIcon" />}
+                {isValidButton ? <Image src={plus} alt="plus" /> : <Image src={nullIcon} alt="nullIcon" />}
               </div>
-              {isUpgradable ? (
+              {isValidButton ? (
                 <div style={{ width: 70 }}>Upgrade</div>
               ) : (
-                <div style={{ width: 130 }}>Need Resources</div>
+                <div style={{ width: 130 }}>{isUpgrading ? 'Upgrading' : 'Need Resources'}</div>
               )}
             </div>
           </ButtonPrimary>
