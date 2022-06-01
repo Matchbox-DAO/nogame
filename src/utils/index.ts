@@ -1,6 +1,9 @@
 import { BigNumber } from 'bignumber.js'
+import { uint256 } from 'starknet'
 
 export const dataToNumber = (value: any) => new BigNumber(value).toNumber()
+
+export const bigDataToNumber = (value: any) => new BigNumber(uint256.uint256ToBN(value)).toNumber()
 
 export const calculEnoughResources = (
   res: { metal: number; crystal: number; deuterium: number },

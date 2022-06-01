@@ -1,18 +1,26 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Row, { RowBetween, RowCentered } from '~/components/Row'
 import styled from 'styled-components'
+import axios from 'axios'
 
 import { ImageIcon } from '~/components/Icons/Image'
 import Column from '~/components/Column'
 import { PlanetIcon } from '~/components/Icons/Planet'
 import { ScaleIcon } from '~/components/Icons/Scale'
 import { TemperatureIcon } from '~/components/Icons/Temperature'
+import { useStarknet, useStarknetCall } from '@starknet-react/core'
+import { useGameContract } from '~/hooks/game'
+import { bigDataToNumber, dataToNumber } from '~/utils'
+import { useErc721Contract } from '~/hooks/erc721'
+import { BigNumber } from 'bignumber.js'
+import Image from 'next/image'
 
 const PlanetImageWrapper = styled(RowCentered)`
-  height: 120px;
-  width: 160px;
-  border-radius: 80px;
+  height: 150px;
+  width: 150px;
+  border-radius: 20px;
   background: #192125;
+  overflow: hidden;
 `
 const MainContainer = styled(RowCentered)`
   gap: 48px;
@@ -50,37 +58,136 @@ const PlanetInfoValue = styled(Row)`
   letter-spacing: 0.02em;
 `
 
+function hex2a(hex: string) {
+  let str = ''
+  for (let i = 0; i < hex.length; i += 2) {
+    const v = parseInt(hex.substring(i, i + 2), 16)
+    if (v) str += String.fromCharCode(v)
+  }
+  return str
+}
+
+const PlanetImage = ({ planetId, address }: { planetId: any; address: string }) => {
+  const ipfsUrl = 'https://gateway.pinata.cloud/ipfs/'
+  const [metadata, setMetadata] = useState<any>()
+  const { contract: ercContract } = useErc721Contract(`0x${address}`)
+  const { data } = useStarknetCall({
+    contract: ercContract,
+    method: 'tokenURI',
+    args: [planetId],
+  })
+
+  useEffect(() => {
+    if (data) {
+      const tokenUri = data['token_uri']
+
+      const uri = tokenUri.reduce((acc, tu) => {
+        const hashName = new BigNumber(tu).toString(16)
+        return `${acc}${hex2a(hashName)}`
+      }, '')
+      const url = `${ipfsUrl}${uri.replace('ipfs://', '')}.json`
+      // console.log(url)
+      axios
+        .get(url)
+        // .get('https://gateway.pinata.cloud/ipfs/QmVijv2FZTxApnNT5bP8CU5dfrNW36s29xJVjckksn6s73/2.json')
+        .then((result) => {
+          // console.log(result)
+          setMetadata(result.data as any)
+        })
+        .catch((e) => console.error(e))
+    }
+  }, [data, setMetadata])
+
+  const findAttribute = (name: string) =>
+    metadata?.attributes.find(({ trait_type }) => trait_type === name)?.value || '-'
+
+  return (
+    <>
+      <PlanetImageWrapper>
+        {metadata?.image ? <Image src={metadata.image} width={150} height={152} /> : <ImageIcon />}{' '}
+        {/** TODO: Add actual image of Planet (NFT)  */}
+      </PlanetImageWrapper>
+
+      <PlanetInfoContainer>
+        <PlanetInfoRow>
+          <PlanetInfoKey>Coordinates</PlanetInfoKey>
+          <PlanetInfoValue>
+            <PlanetIcon />
+            {findAttribute('position')}
+          </PlanetInfoValue>
+        </PlanetInfoRow>
+        <PlanetInfoRow>
+          <PlanetInfoKey>Size</PlanetInfoKey>
+          <PlanetInfoValue>
+            <ScaleIcon />
+            {findAttribute('size')}
+          </PlanetInfoValue>
+        </PlanetInfoRow>
+        <PlanetInfoRow>
+          <PlanetInfoKey>Temp</PlanetInfoKey>
+          <PlanetInfoValue>
+            <TemperatureIcon />
+            {findAttribute('temperature')}
+          </PlanetInfoValue>
+        </PlanetInfoRow>
+      </PlanetInfoContainer>
+    </>
+  )
+}
+
 export const PlanetSection: FC = () => {
+  const { account } = useStarknet()
+  const { contract: gameContract } = useGameContract()
+  const { data } = useStarknetCall({
+    contract: gameContract,
+    method: 'owner_of',
+    args: [account],
+  })
+
+  const { data: erc721 } = useStarknetCall({
+    contract: gameContract,
+    method: 'erc721_address',
+    args: [],
+  })
+
+  const planetId = data && data['planet_id']
+  const addr = erc721 && new BigNumber(erc721['res'])?.toString(16)
+
+  // console.log(planetId, addr)
+
   return (
     <RowCentered>
       <MainContainer>
-        <PlanetImageWrapper>
-          <ImageIcon /> {/** TODO: Add actual image of Planet (NFT)  */}
-        </PlanetImageWrapper>
+        {planetId && addr ? (
+          <PlanetImage address={addr} planetId={planetId} />
+        ) : (
+          <>
+            <PlanetImageWrapper>
+              <ImageIcon /> {/** TODO: Add actual image of Planet (NFT)  */}
+            </PlanetImageWrapper>
 
-        <PlanetInfoContainer>
-          <PlanetInfoRow>
-            <PlanetInfoKey>Coordinates</PlanetInfoKey>
-            <PlanetInfoValue>
-              <PlanetIcon />
-              RA 21H 40M 365
-            </PlanetInfoValue>
-          </PlanetInfoRow>
-          <PlanetInfoRow>
-            <PlanetInfoKey>Size</PlanetInfoKey>
-            <PlanetInfoValue>
-              <ScaleIcon />
-              58,232
-            </PlanetInfoValue>
-          </PlanetInfoRow>
-          <PlanetInfoRow>
-            <PlanetInfoKey>Temp</PlanetInfoKey>
-            <PlanetInfoValue>
-              <TemperatureIcon />
-              178c (-28sf)
-            </PlanetInfoValue>
-          </PlanetInfoRow>
-        </PlanetInfoContainer>
+            <PlanetInfoContainer>
+              <PlanetInfoRow>
+                <PlanetInfoKey>Coordinates</PlanetInfoKey>
+                <PlanetInfoValue>
+                  <PlanetIcon />-
+                </PlanetInfoValue>
+              </PlanetInfoRow>
+              <PlanetInfoRow>
+                <PlanetInfoKey>Size</PlanetInfoKey>
+                <PlanetInfoValue>
+                  <ScaleIcon />-
+                </PlanetInfoValue>
+              </PlanetInfoRow>
+              <PlanetInfoRow>
+                <PlanetInfoKey>Temp</PlanetInfoKey>
+                <PlanetInfoValue>
+                  <TemperatureIcon />-
+                </PlanetInfoValue>
+              </PlanetInfoRow>
+            </PlanetInfoContainer>
+          </>
+        )}
       </MainContainer>
     </RowCentered>
   )
