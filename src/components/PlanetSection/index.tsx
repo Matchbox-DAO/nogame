@@ -67,10 +67,12 @@ function hex2a(hex: string) {
   return str
 }
 
-const PlanetImage = ({ planetId, address }: { planetId: any; address: string }) => {
+const PlanetImage = ({ planetId }: { planetId: any; address: string }) => {
   const ipfsUrl = 'https://gateway.pinata.cloud/ipfs/'
   const [metadata, setMetadata] = useState<any>()
-  const { contract: ercContract } = useErc721Contract(`0x${address}`)
+  const { contract: ercContract } = useErc721Contract(
+    `0x0651853aabaf78f1f1501bf082b42aad992ed99c61892bc0e5ac2ab5d03d11b8`
+  )
   const { data } = useStarknetCall({
     contract: ercContract,
     method: 'tokenURI',
@@ -78,7 +80,7 @@ const PlanetImage = ({ planetId, address }: { planetId: any; address: string }) 
   })
 
   useEffect(() => {
-    if (data) {
+    if (data && !metadata) {
       const tokenUri = data['token_uri']
 
       const uri = tokenUri.reduce((acc, tu) => {
@@ -86,7 +88,6 @@ const PlanetImage = ({ planetId, address }: { planetId: any; address: string }) 
         return `${acc}${hex2a(hashName)}`
       }, '')
       const url = `${ipfsUrl}${uri.replace('ipfs://', '')}.json`
-      // console.log(url)
       axios
         .get(url)
         // .get('https://gateway.pinata.cloud/ipfs/QmVijv2FZTxApnNT5bP8CU5dfrNW36s29xJVjckksn6s73/2.json')
@@ -98,13 +99,16 @@ const PlanetImage = ({ planetId, address }: { planetId: any; address: string }) 
     }
   }, [data, setMetadata])
 
+  const imgUrl = (ipfs: string) => `${ipfsUrl}${ipfs.replace('ipfs/', '')}`
+
   const findAttribute = (name: string) =>
     metadata?.attributes.find(({ trait_type }) => trait_type === name)?.value || '-'
+  // console.log('metadata', metadata, metadata && imgUrl(metadata.image))
 
   return (
     <>
       <PlanetImageWrapper>
-        {metadata?.image ? <Image src={metadata.image} width={150} height={152} /> : <ImageIcon />}{' '}
+        {metadata?.image ? <Image src={imgUrl(metadata?.image)} width={150} height={152} /> : <ImageIcon />}{' '}
         {/** TODO: Add actual image of Planet (NFT)  */}
       </PlanetImageWrapper>
 
