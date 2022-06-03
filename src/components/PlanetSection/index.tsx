@@ -92,7 +92,7 @@ const PlanetImage = ({ planetId }: { planetId: any; address: string }) => {
         .get(url)
         // .get('https://gateway.pinata.cloud/ipfs/QmVijv2FZTxApnNT5bP8CU5dfrNW36s29xJVjckksn6s73/2.json')
         .then((result) => {
-          // console.log(result)
+          console.log(result)
           setMetadata(result.data as any)
         })
         .catch((e) => console.error(e))
@@ -103,7 +103,7 @@ const PlanetImage = ({ planetId }: { planetId: any; address: string }) => {
 
   const findAttribute = (name: string) =>
     metadata?.attributes.find(({ trait_type }) => trait_type === name)?.value || '-'
-  // console.log('metadata', metadata, metadata && imgUrl(metadata.image))
+  console.log('metadata', metadata, metadata && imgUrl(metadata.image))
 
   return (
     <>
