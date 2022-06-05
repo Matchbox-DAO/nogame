@@ -34,8 +34,6 @@ export const ResourceTabPanel = ({
     return undefined
   }
 
-  useEffect(() => {})
-
   return (
     <StyledTabPanel {...rest}>
       <ResourceBox

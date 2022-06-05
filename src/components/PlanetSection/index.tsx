@@ -97,7 +97,7 @@ const PlanetImage = ({ planetId }: { planetId: any }) => {
         })
         .catch((e) => console.error(e))
     }
-  }, [data, setMetadata])
+  }, [data, setMetadata, metadata])
 
   const imgUrl = (ipfs: string) => `${ipfsUrl}${ipfs.replace('ipfs/', '')}`
 

@@ -89,7 +89,7 @@ type ButtonState = 'valid' | 'noResource' | 'updated' | 'upgrading'
 interface ButtonArrayStates {
   state: ButtonState
   title: string
-  callback: () => void
+  callback?: () => void
   color?: string
   icon: React.ReactNode
 }
@@ -132,7 +132,7 @@ const ResourceBox = ({
     {
       state: 'upgrading',
       title: 'In Progress',
-      callback: () => {},
+      // callback: () => void,
       color: 'yellow',
       icon: <Image src={plus} alt="plus" />,
     },
@@ -146,7 +146,7 @@ const ResourceBox = ({
     {
       state: 'noResource',
       title: 'Need Resources',
-      callback: () => {},
+      // callback: () => {},
       color: '#402F2C',
       icon: <Image src={plus} alt="plus" />,
     },
@@ -203,7 +203,7 @@ const ResourceBox = ({
         <div style={{ width: 300 }}>
           <ButtonPrimary
             customColor={isDisabled ? undefined : actualButtonState?.color}
-            onClick={() => actualButtonState?.callback()}
+            onClick={() => actualButtonState?.callback && actualButtonState.callback()}
             disabled={isDisabled}
           >
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
