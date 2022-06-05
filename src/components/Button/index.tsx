@@ -56,7 +56,10 @@ export const ButtonPrimary = styled(Base)`
   }
 
   &:disabled {
-    background: #815042;
-    color: #462f29;
+    //background: #815042;
+    background: ${(props: { customColor?: string }) =>
+      props.customColor ? darken(0.2, props.customColor) : '#815042'};
+    //color: black;
+    // color: ${(props: { customColor?: string }) => (props.customColor ? darken(0.1, props.customColor) : '#462f29')};
   }
 `

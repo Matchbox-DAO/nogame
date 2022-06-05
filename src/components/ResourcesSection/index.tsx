@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import { RowCentered } from '~/components/Row'
 import { ResourcesTabList, ResourcesTabs, ResourceTab } from './styleds'
 import { ResourcesIcon } from '~/components/Icons/Resources'
@@ -44,8 +44,8 @@ export const ResourcesSection: FC = () => {
   const endTimeCompletion = useMemo(() => {
     if (timeCompletion) {
       const end = fromUnixTime(dataToNumber(timeCompletion['time_end']))
-
       const timeDifferenceInMinutes = differenceInMinutes(end, new Date())
+      console.log(end, timeDifferenceInMinutes)
 
       return {
         resourceId: dataToNumber(timeCompletion['building_id']),
@@ -54,7 +54,7 @@ export const ResourcesSection: FC = () => {
     }
   }, [timeCompletion])
 
-  const points = useMemo(() => {
+  const playerResources = useMemo(() => {
     if (resourcesAvailable) {
       return {
         metal: dataToNumber(resourcesAvailable['metal']),
@@ -142,13 +142,13 @@ export const ResourcesSection: FC = () => {
 
       <ResourceTabPanel
         endTimeCompletion={endTimeCompletion}
-        points={points}
+        playerResources={playerResources}
         resourceLevels={resourceLevels}
         costUpgrade={costUpgrade}
       />
       <FacilitiesTabPanel
         endTimeCompletion={endTimeCompletion}
-        points={points}
+        points={playerResources}
         resourceLevels={resourceLevels}
         costUpgrade={costUpgrade}
       />

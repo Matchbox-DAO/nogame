@@ -67,7 +67,7 @@ function hex2a(hex: string) {
   return str
 }
 
-const PlanetImage = ({ planetId }: { planetId: any; address: string }) => {
+const PlanetImage = ({ planetId }: { planetId: any }) => {
   const ipfsUrl = 'https://gateway.pinata.cloud/ipfs/'
   const [metadata, setMetadata] = useState<any>()
   const { contract: ercContract } = useErc721Contract(
@@ -87,12 +87,12 @@ const PlanetImage = ({ planetId }: { planetId: any; address: string }) => {
         const hashName = new BigNumber(tu).toString(16)
         return `${acc}${hex2a(hashName)}`
       }, '')
+
       const url = `${ipfsUrl}${uri.replace('ipfs://', '')}.json`
+
       axios
         .get(url)
-        // .get('https://gateway.pinata.cloud/ipfs/QmVijv2FZTxApnNT5bP8CU5dfrNW36s29xJVjckksn6s73/2.json')
         .then((result) => {
-          console.log(result)
           setMetadata(result.data as any)
         })
         .catch((e) => console.error(e))
@@ -103,18 +103,16 @@ const PlanetImage = ({ planetId }: { planetId: any; address: string }) => {
 
   const findAttribute = (name: string) =>
     metadata?.attributes.find(({ trait_type }) => trait_type === name)?.value || '-'
-  console.log('metadata', metadata, metadata && imgUrl(metadata.image))
 
   return (
     <>
       <PlanetImageWrapper>
         {metadata?.image ? <Image src={imgUrl(metadata?.image)} width={150} height={152} /> : <ImageIcon />}{' '}
-        {/** TODO: Add actual image of Planet (NFT)  */}
       </PlanetImageWrapper>
 
       <PlanetInfoContainer>
         <PlanetInfoRow>
-          <PlanetInfoKey>Coordinates</PlanetInfoKey>
+          <PlanetInfoKey>Planet #</PlanetInfoKey>
           <PlanetInfoValue>
             <PlanetIcon />
             {findAttribute('position')}
@@ -148,22 +146,13 @@ export const PlanetSection: FC = () => {
     args: [account],
   })
 
-  const { data: erc721 } = useStarknetCall({
-    contract: gameContract,
-    method: 'erc721_address',
-    args: [],
-  })
-
   const planetId = data && data['planet_id']
-  const addr = erc721 && new BigNumber(erc721['res'])?.toString(16)
-
-  // console.log(planetId, addr)
 
   return (
     <RowCentered>
       <MainContainer>
-        {planetId && addr ? (
-          <PlanetImage address={addr} planetId={planetId} />
+        {planetId ? (
+          <PlanetImage planetId={planetId} />
         ) : (
           <>
             <PlanetImageWrapper>

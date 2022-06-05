@@ -52,7 +52,7 @@ export const FacilitiesTabPanel = ({ endTimeCompletion, points, resourceLevels, 
         time={getEndTime(5)}
         costUpdate={costUpgrade?.robotFactory}
         isUpgrading={isUpgrading}
-        isUpgradable={points && costUpgrade && calculEnoughResources(costUpgrade.robotFactory, points)}
+        hasEnoughResources={points && costUpgrade && calculEnoughResources(costUpgrade.robotFactory, points)}
       />
     </StyledTabPanel>
   )

@@ -7,10 +7,12 @@ import Image from 'next/image'
 import useUpgradeResourceStart, { ResourceType } from '~/hooks/calls/useUpgradeResourceStart'
 
 import plus from '~/assets/icons/Plus.svg'
-import nullIcon from '~/assets/icons/Null.svg'
 import Column from '../Column'
+import React, { useMemo } from 'react'
+import useCollectResources from '~/hooks/calls/useCollectResources'
+import useCompleteResource from '~/hooks/calls/useCompleteResource'
 
-const Box = styled.div<{ isUpgradable?: boolean }>`
+const Box = styled.div<{ customColor: string }>`
   width: 100%;
   max-height: 70px;
   display: flex;
@@ -19,8 +21,8 @@ const Box = styled.div<{ isUpgradable?: boolean }>`
   //justify-content: space-between;
   margin-bottom: 10px;
   //padding: 10px;
-  border: 2px solid ${(props) => (props.isUpgradable ? '#6CBD6A' : '#402F2C')};
-  background-color: ${(props) => (props.isUpgradable ? '#394639' : '#151A1E')};
+  border: 2px solid ${(props) => props.customColor};
+  background-color: #151a1e;
   border-radius: 4px;
   overflow: hidden;
 `
@@ -76,18 +78,86 @@ interface Props {
   title: string
   functionCallName: ResourceType
   level?: number
-  time: number
+  time?: number
   costUpdate?: { metal: number; crystal: number; deuterium: number }
-  isUpgradable?: boolean
+  hasEnoughResources?: boolean
   isUpgrading?: boolean
 }
 
-const ResourceBox = ({ img, title, level, isUpgradable, isUpgrading, costUpdate, functionCallName, time }: Props) => {
+type ButtonState = 'valid' | 'noResource' | 'updated' | 'upgrading'
+
+interface ButtonArrayStates {
+  state: ButtonState
+  title: string
+  callback: () => void
+  color?: string
+  icon: React.ReactNode
+}
+
+const ResourceBox = ({
+  img,
+  title,
+  level,
+  hasEnoughResources,
+  costUpdate,
+  functionCallName,
+  time,
+  isUpgrading,
+}: Props) => {
   const upgrade = useUpgradeResourceStart(functionCallName)
-  const isValidButton = isUpgrading ? false : isUpgradable
+  const complete = useCompleteResource(functionCallName)
+  const collectResources = useCollectResources()
+
+  const buttonState = useMemo((): ButtonState => {
+    if (!hasEnoughResources) {
+      return 'noResource'
+    }
+    if (time !== undefined && time > 0) {
+      return 'upgrading'
+    } else if (time !== undefined && time === 0) {
+      return 'updated'
+    }
+
+    return 'valid'
+  }, [hasEnoughResources, time])
+
+  const statesButton: ButtonArrayStates[] = [
+    {
+      state: 'valid',
+      title: 'Upgrade',
+      callback: upgrade,
+      color: '#6cbd6a',
+      icon: <Image src={plus} alt="plus" />,
+    },
+    {
+      state: 'upgrading',
+      title: 'In Progress',
+      callback: () => {},
+      color: 'yellow',
+      icon: <Image src={plus} alt="plus" />,
+    },
+    {
+      state: 'updated',
+      title: 'Complete Upgrade',
+      callback: complete,
+      color: '#0DACF0',
+      icon: <Image src={plus} alt="plus" />,
+    },
+    {
+      state: 'noResource',
+      title: 'Need Resources',
+      callback: () => {},
+      color: '#402F2C',
+      icon: <Image src={plus} alt="plus" />,
+    },
+  ]
+
+  const actualButtonState = statesButton.find((state) => state.state === buttonState)
+  const isDisabled =
+    isUpgrading || actualButtonState?.state === 'noResource' || actualButtonState?.state === 'upgrading'
 
   return (
-    <Box isUpgradable={isValidButton}>
+    <Box customColor={actualButtonState?.color ?? 'grey'}>
       <ImageContainer>
         <Image src={img} alt={title} />
       </ImageContainer>
@@ -132,19 +202,13 @@ const ResourceBox = ({ img, title, level, isUpgradable, isUpgrading, costUpdate,
         </InfoContainer>
         <div style={{ width: 300 }}>
           <ButtonPrimary
-            disabled={!isValidButton}
-            onClick={() => upgrade()}
-            customColor={isValidButton ? undefined : '#402F2C'}
+            customColor={isDisabled ? undefined : actualButtonState?.color}
+            onClick={() => actualButtonState?.callback()}
+            disabled={isDisabled}
           >
             <div style={{ display: 'flex', flex: 1, justifyContent: 'center', flexDirection: 'row' }}>
-              <div style={{ width: 20, height: 20 }}>
-                {isValidButton ? <Image src={plus} alt="plus" /> : <Image src={nullIcon} alt="nullIcon" />}
-              </div>
-              {isValidButton ? (
-                <div style={{ width: 70 }}>Upgrade</div>
-              ) : (
-                <div style={{ width: 130 }}>{isUpgrading ? 'Upgrading' : 'Need Resources'}</div>
-              )}
+              <div style={{ width: 20, height: 20 }}>{actualButtonState?.icon}</div>
+              {actualButtonState?.title}
             </div>
           </ButtonPrimary>
         </div>
