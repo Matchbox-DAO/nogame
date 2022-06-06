@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import Row, { RowBetween, RowCentered } from '~/components/Row'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -99,7 +99,14 @@ const PlanetImage = ({ planetId }: { planetId: any }) => {
     }
   }, [data, setMetadata, metadata])
 
-  const imgUrl = (ipfs: string) => `${ipfsUrl}${ipfs.replace('ipfs/', '')}`
+  // const imgUrl = (ipfs: string) => `${ipfsUrl}${ipfs.replace('ipfs/', '')}`
+  const imgNumber = useMemo(() => {
+    if (metadata) {
+      const splitHash = metadata.image.split('/')
+      const imgFormat = splitHash[splitHash.length - 1]
+      return Number(imgFormat.split('.')[0])
+    }
+  }, [metadata])
 
   const findAttribute = (name: string) =>
     metadata?.attributes.find(({ trait_type }) => trait_type === name)?.value || '-'
@@ -107,7 +114,7 @@ const PlanetImage = ({ planetId }: { planetId: any }) => {
   return (
     <>
       <PlanetImageWrapper>
-        {metadata?.image ? <Image src={imgUrl(metadata?.image)} width={150} height={152} /> : <ImageIcon />}{' '}
+        {metadata?.image ? <Image src={`/planets/${imgNumber}.png`} width={150} height={152} /> : <ImageIcon />}{' '}
       </PlanetImageWrapper>
 
       <PlanetInfoContainer>
@@ -151,36 +158,7 @@ export const PlanetSection: FC = () => {
   return (
     <RowCentered>
       <MainContainer>
-        {planetId ? (
-          <PlanetImage planetId={planetId} />
-        ) : (
-          <>
-            <PlanetImageWrapper>
-              <ImageIcon /> {/** TODO: Add actual image of Planet (NFT)  */}
-            </PlanetImageWrapper>
-
-            <PlanetInfoContainer>
-              <PlanetInfoRow>
-                <PlanetInfoKey>Coordinates</PlanetInfoKey>
-                <PlanetInfoValue>
-                  <PlanetIcon />-
-                </PlanetInfoValue>
-              </PlanetInfoRow>
-              <PlanetInfoRow>
-                <PlanetInfoKey>Size</PlanetInfoKey>
-                <PlanetInfoValue>
-                  <ScaleIcon />-
-                </PlanetInfoValue>
-              </PlanetInfoRow>
-              <PlanetInfoRow>
-                <PlanetInfoKey>Temp</PlanetInfoKey>
-                <PlanetInfoValue>
-                  <TemperatureIcon />-
-                </PlanetInfoValue>
-              </PlanetInfoRow>
-            </PlanetInfoContainer>
-          </>
-        )}
+        <PlanetImage planetId={planetId} />
       </MainContainer>
     </RowCentered>
   )

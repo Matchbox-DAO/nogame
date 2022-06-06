@@ -7,7 +7,7 @@ import DeuteriumImg from '~/assets/resources/deuterium.jpg'
 import SolarPlantImg from '~/assets/resources/solar_plant.jpg'
 import { CostUpgrade, ResourceLevels, Points, EndTimeCompletion } from '~/utils/types'
 import { calculEnoughResources } from '~/utils'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 interface Props {
   endTimeCompletion?: EndTimeCompletion
