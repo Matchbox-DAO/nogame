@@ -29,7 +29,7 @@ const Box = styled.div<{ customColor: string }>`
 
 const SubBox = styled.div`
   width: 100%;
-  max-height: 200px;
+  //max-height: 200px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -42,7 +42,7 @@ const Title = styled.div`
 `
 
 const InfoContainer = styled.div`
-  width: 600px;
+  //width: 600px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -67,10 +67,22 @@ const ResourceTitle = styled.div`
   color: grey;
   font-weight: 700;
   font-size: 12px;
+  @media (max-width: 1000px) {
+    display: none;
+  }
 `
 
 const ImageContainer = styled.div`
   width: 70px;
+`
+
+const ButtonContainer = styled.div`
+  max-width: 300px;
+  min-width: 195px;
+
+  @media (min-width: 1000px) {
+    width: 300px;
+  }
 `
 
 interface Props {
@@ -200,7 +212,7 @@ const ResourceBox = ({
             </NumberContainer>
           </ResourceContainer>
         </InfoContainer>
-        <div style={{ width: 300 }}>
+        <ButtonContainer>
           <ButtonPrimary
             customColor={isDisabled ? undefined : actualButtonState?.color}
             onClick={() => actualButtonState?.callback && actualButtonState.callback()}
@@ -211,7 +223,7 @@ const ResourceBox = ({
               {actualButtonState?.title}
             </div>
           </ButtonPrimary>
-        </div>
+        </ButtonContainer>
       </SubBox>
     </Box>
   )

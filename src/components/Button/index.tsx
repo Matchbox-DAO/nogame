@@ -62,4 +62,9 @@ export const ButtonPrimary = styled(Base)`
     //color: black;
     // color: ${(props: { customColor?: string }) => (props.customColor ? darken(0.1, props.customColor) : '#462f29')};
   }
+
+  @media (max-width: 1000px) {
+    font-size: 14px;
+    padding: 6px 18px;
+  }
 `
