@@ -1,13 +1,15 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 import nogame from '~/assets/NoGameLogo.png'
-import ranking from '~/assets/icons/Ranking.svg'
 import trophy from '~/assets/icons/Trophy.svg'
+// import ranking from '~/assets/icons/Ranking.svg'
 import { useStarknet, useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import { useMemo } from 'react'
-import { BigNumber } from 'bignumber.js'
+import { dataToNumber } from '~/utils'
+import BigNumber from 'bignumber.js'
 import { uint256 } from 'starknet'
+import { TrophyIcon } from '~/components/Icons/Trophy'
 
 const LogoContainer = styled.div`
   display: flex;
@@ -61,7 +63,7 @@ const LogoAndRankContainer = () => {
 
   const points = useMemo(() => {
     if (data) {
-      return new BigNumber(uint256.uint256ToBN(data['points'])).toNumber()
+      return dataToNumber(data['points'])
     }
   }, [data])
 
@@ -71,16 +73,16 @@ const LogoAndRankContainer = () => {
         <Image src={nogame} alt="nogame" objectFit="contain" />
       </div>
       <RankContainer>
+        {/*<RankLineContainer>*/}
+        {/*  <div style={{ display: 'flex', alignItems: 'center' }}>*/}
+        {/*    <Image src={ranking} alt="ranking" objectFit="contain" />*/}
+        {/*    <TitleContainer>Rank</TitleContainer>*/}
+        {/*  </div>*/}
+        {/*  {points ?? 'N/A'}*/}
+        {/*</RankLineContainer>*/}
         <RankLineContainer>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Image src={ranking} alt="ranking" objectFit="contain" />
-            <TitleContainer>Rank</TitleContainer>
-          </div>
-          {points ?? 'N/A'}
-        </RankLineContainer>
-        <RankLineContainer>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Image src={trophy} alt="trophy" objectFit="contain" />
+            <TrophyIcon />
             <TitleContainer>Score</TitleContainer>
           </div>
           {points ?? 'N/A'}

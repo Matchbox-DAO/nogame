@@ -48,10 +48,16 @@ export const ResourceTab = styled(Tab)`
 
 export const StyledTabPanel = styled(TabPanel)`
   width: 100%;
-  background: #1e2327;
+  padding: 10px;
+  //background: #1e2327;
   display: flex;
+  flex-direction: column;
+  //background-color: darkslategray;
 
   &.react-tabs__tab-panel--selected {
-    height: 100%;
+    //height: 300px;
+    overflow: auto;
+    //min-height: 200px;
   }
+  overflow: auto;
 `

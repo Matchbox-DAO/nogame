@@ -1,18 +1,26 @@
-import { FC } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import Row, { RowBetween, RowCentered } from '~/components/Row'
 import styled from 'styled-components'
+import axios from 'axios'
 
 import { ImageIcon } from '~/components/Icons/Image'
 import Column from '~/components/Column'
 import { PlanetIcon } from '~/components/Icons/Planet'
 import { ScaleIcon } from '~/components/Icons/Scale'
 import { TemperatureIcon } from '~/components/Icons/Temperature'
+import { useStarknet, useStarknetCall } from '@starknet-react/core'
+import { useGameContract } from '~/hooks/game'
+import { bigDataToNumber, dataToNumber } from '~/utils'
+import { useErc721Contract } from '~/hooks/erc721'
+import { BigNumber } from 'bignumber.js'
+import Image from 'next/image'
 
 const PlanetImageWrapper = styled(RowCentered)`
-  height: 120px;
-  width: 160px;
-  border-radius: 80px;
+  height: 150px;
+  width: 150px;
+  border-radius: 20px;
   background: #192125;
+  overflow: hidden;
 `
 const MainContainer = styled(RowCentered)`
   gap: 48px;
@@ -50,37 +58,107 @@ const PlanetInfoValue = styled(Row)`
   letter-spacing: 0.02em;
 `
 
+function hex2a(hex: string) {
+  let str = ''
+  for (let i = 0; i < hex.length; i += 2) {
+    const v = parseInt(hex.substring(i, i + 2), 16)
+    if (v) str += String.fromCharCode(v)
+  }
+  return str
+}
+
+const PlanetImage = ({ planetId }: { planetId: any }) => {
+  const ipfsUrl = 'https://gateway.pinata.cloud/ipfs/'
+  const [metadata, setMetadata] = useState<any>()
+  const { contract: ercContract } = useErc721Contract(
+    `0x0651853aabaf78f1f1501bf082b42aad992ed99c61892bc0e5ac2ab5d03d11b8`
+  )
+  const { data } = useStarknetCall({
+    contract: ercContract,
+    method: 'tokenURI',
+    args: [planetId],
+  })
+
+  useEffect(() => {
+    if (data && !metadata) {
+      const tokenUri = data['token_uri']
+
+      const uri = tokenUri.reduce((acc, tu) => {
+        const hashName = new BigNumber(tu).toString(16)
+        return `${acc}${hex2a(hashName)}`
+      }, '')
+
+      const url = `${ipfsUrl}${uri.replace('ipfs://', '')}.json`
+
+      axios
+        .get(url)
+        .then((result) => {
+          setMetadata(result.data as any)
+        })
+        .catch((e) => console.error(e))
+    }
+  }, [data, setMetadata, metadata])
+
+  // const imgUrl = (ipfs: string) => `${ipfsUrl}${ipfs.replace('ipfs/', '')}`
+  const imgNumber = useMemo(() => {
+    if (metadata) {
+      const splitHash = metadata.image.split('/')
+      const imgFormat = splitHash[splitHash.length - 1]
+      return Number(imgFormat.split('.')[0])
+    }
+  }, [metadata])
+
+  const findAttribute = (name: string) =>
+    metadata?.attributes.find(({ trait_type }) => trait_type === name)?.value || '-'
+
+  return (
+    <>
+      <PlanetImageWrapper>
+        {metadata?.image ? <Image src={`/planets/${imgNumber}.png`} width={150} height={152} /> : <ImageIcon />}{' '}
+      </PlanetImageWrapper>
+
+      <PlanetInfoContainer>
+        <PlanetInfoRow>
+          <PlanetInfoKey>Planet #</PlanetInfoKey>
+          <PlanetInfoValue>
+            <PlanetIcon />
+            {findAttribute('position')}
+          </PlanetInfoValue>
+        </PlanetInfoRow>
+        <PlanetInfoRow>
+          <PlanetInfoKey>Size</PlanetInfoKey>
+          <PlanetInfoValue>
+            <ScaleIcon />
+            {findAttribute('size')}
+          </PlanetInfoValue>
+        </PlanetInfoRow>
+        <PlanetInfoRow>
+          <PlanetInfoKey>Temp</PlanetInfoKey>
+          <PlanetInfoValue>
+            <TemperatureIcon />
+            {findAttribute('temperature')}
+          </PlanetInfoValue>
+        </PlanetInfoRow>
+      </PlanetInfoContainer>
+    </>
+  )
+}
+
 export const PlanetSection: FC = () => {
+  const { account } = useStarknet()
+  const { contract: gameContract } = useGameContract()
+  const { data } = useStarknetCall({
+    contract: gameContract,
+    method: 'owner_of',
+    args: [account],
+  })
+
+  const planetId = data && data['planet_id']
+
   return (
     <RowCentered>
       <MainContainer>
-        <PlanetImageWrapper>
-          <ImageIcon /> {/** TODO: Add actual image of Planet (NFT)  */}
-        </PlanetImageWrapper>
-
-        <PlanetInfoContainer>
-          <PlanetInfoRow>
-            <PlanetInfoKey>Coordinates</PlanetInfoKey>
-            <PlanetInfoValue>
-              <PlanetIcon />
-              RA 21H 40M 365
-            </PlanetInfoValue>
-          </PlanetInfoRow>
-          <PlanetInfoRow>
-            <PlanetInfoKey>Size</PlanetInfoKey>
-            <PlanetInfoValue>
-              <ScaleIcon />
-              58,232
-            </PlanetInfoValue>
-          </PlanetInfoRow>
-          <PlanetInfoRow>
-            <PlanetInfoKey>Temp</PlanetInfoKey>
-            <PlanetInfoValue>
-              <TemperatureIcon />
-              178c (-28sf)
-            </PlanetInfoValue>
-          </PlanetInfoRow>
-        </PlanetInfoContainer>
+        <PlanetImage planetId={planetId} />
       </MainContainer>
     </RowCentered>
   )
