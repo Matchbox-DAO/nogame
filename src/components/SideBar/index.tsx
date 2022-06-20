@@ -13,12 +13,12 @@ const BodyContainer = styled.div`
 `
 
 const SideBar = () => {
-  const injected = useMemo(() => new InjectedConnector({ showModal: false }), [])
+  const injected = useMemo(() => new InjectedConnector(), [])
   const { account, disconnect } = useStarknet()
 
   return (
     <BodyContainer>
-      <WalletHeader account={account} disconnect={() => disconnect(injected)} />
+      <WalletHeader account={account} disconnect={() => disconnect()} />
       <LogoAndRankContainer />
       <ResourcesContainer />
     </BodyContainer>
