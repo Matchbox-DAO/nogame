@@ -47,6 +47,7 @@ const InfoContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: 50%;
 `
 const ResourceContainer = styled(Column)`
   width: 50px;
@@ -67,7 +68,7 @@ const ResourceTitle = styled.div`
   color: grey;
   font-weight: 700;
   font-size: 12px;
-  @media (max-width: 1000px) {
+  @media (max-width: 1300px) {
     display: none;
   }
 `
@@ -187,7 +188,7 @@ const ResourceBox = ({
             <ResourceTitle>TIME COMPLETION</ResourceTitle>
             <NumberContainer>
               <Clock />
-              {time !== undefined ? `${time}m` : ''}
+              {time !== undefined ? `${time}m` : '-'}
             </NumberContainer>
           </ResourceContainer>
           <ResourceContainer>

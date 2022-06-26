@@ -1,6 +1,6 @@
 import { useStarknet, useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { uint256 } from 'starknet'
 import styled from 'styled-components'
@@ -43,6 +43,7 @@ interface Props {
   img: any
   iconImg: any
   title: string
+  address?: string
 }
 
 const TotalResourceText = styled.div`
@@ -58,13 +59,35 @@ const TotalResourceContainer = styled.div`
 const TotalResourceWrapper = styled.div`
   margin-left: 30px;
 `
+const ResourceAddress = styled.div`
+  font-size: 12px;
+`
 
-const Resource = ({ total, img, iconImg, title }: Props) => {
+const ImageAddressContainer = styled.div`
+  width: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+`
+
+const Resource = ({ total, img, iconImg, title, address }: Props) => {
+  const [copied, setCopied] = useState(false)
   return (
     <Container>
-      <div style={{ width: 32 }}>
+      <ImageAddressContainer
+        onClick={() => {
+          if (address) {
+            const blob = new Blob([address], { type: 'text/plain' })
+
+            const item = new ClipboardItem({ 'text/plain': blob })
+            navigator.clipboard.write([item]).then(() => setCopied(true))
+          }
+        }}
+      >
         <Image src={img} alt="resource" objectFit="contain" />
-      </div>
+        {address && !copied && <ResourceAddress>{`${address.substring(0, 6)}...`}</ResourceAddress>}
+        {copied && <ResourceAddress>Copied</ResourceAddress>}
+      </ImageAddressContainer>
       <TotalResourceWrapper>
         {title}
         <TotalResourceContainer>
@@ -97,9 +120,27 @@ const ResourcesContainer = () => {
   }, [data])
   return (
     <div>
-      <Resource title="Metal" img={iron} iconImg={coins} total={points?.metal} />
-      <Resource title="Crystal" img={crystal} iconImg={gem} total={points?.crystal} />
-      <Resource title="Deuterium" img={deuterium} iconImg={atom} total={points?.deuterium} />
+      <Resource
+        title="Metal"
+        address="0x0265d5a668851b795e09a829b327b47ec29f8379ed5654ef3c5d123c631d0e51"
+        img={iron}
+        iconImg={coins}
+        total={points?.metal}
+      />
+      <Resource
+        title="Crystal"
+        address="0x012a3cb1f8b78b58738cdab8eaf5dd74e0a4e2cae8ff7c0a9e5f2a9d613bc41b"
+        img={crystal}
+        iconImg={gem}
+        total={points?.crystal}
+      />
+      <Resource
+        title="Deuterium"
+        address="0x056a0a87f1890fde003b41b63969fd1eb2d903ef912441b39d02f04bd6cd44ba"
+        img={deuterium}
+        iconImg={atom}
+        total={points?.deuterium}
+      />
       <Resource title="Energy" img={energy} iconImg={bolt} total={points?.energy} />
     </div>
   )
