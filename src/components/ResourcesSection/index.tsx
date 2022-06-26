@@ -45,7 +45,7 @@ export const ResourcesSection: FC = () => {
     if (timeCompletion) {
       const end = fromUnixTime(dataToNumber(timeCompletion['time_end']))
       const timeDifferenceInMinutes = differenceInMinutes(end, new Date())
-      console.log(end, timeDifferenceInMinutes)
+      // console.log(end, timeDifferenceInMinutes)
 
       return {
         resourceId: dataToNumber(timeCompletion['building_id']),

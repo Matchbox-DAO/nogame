@@ -64,10 +64,14 @@ const ResourceAddress = styled.div`
 `
 
 const ImageAddressContainer = styled.div`
-  width: 30px;
-  &:hover {
+  min &:hover {
     cursor: pointer;
   }
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  min-width: 50px;
 `
 
 const Resource = ({ total, img, iconImg, title, address }: Props) => {
@@ -78,13 +82,14 @@ const Resource = ({ total, img, iconImg, title, address }: Props) => {
         onClick={() => {
           if (address) {
             const blob = new Blob([address], { type: 'text/plain' })
-
             const item = new ClipboardItem({ 'text/plain': blob })
             navigator.clipboard.write([item]).then(() => setCopied(true))
           }
         }}
       >
-        <Image src={img} alt="resource" objectFit="contain" />
+        <div style={{ width: '30px' }}>
+          <Image src={img} alt="resource" objectFit="contain" />
+        </div>
         {address && !copied && <ResourceAddress>{`${address.substring(0, 6)}...`}</ResourceAddress>}
         {copied && <ResourceAddress>Copied</ResourceAddress>}
       </ImageAddressContainer>
