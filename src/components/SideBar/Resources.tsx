@@ -127,21 +127,21 @@ const ResourcesContainer = () => {
     <div>
       <Resource
         title="Metal"
-        address="0x0730fc0392325eeae3a819a7b1fd0ff4ae1a3a6016d7a5dc86285e804e1031f5"
+        address="0x043d8d23118a2fa64325a0b0a5606a67b30253cdb334c8fd75b270aba08c25ab"
         img={iron}
         iconImg={coins}
         total={points?.metal}
       />
       <Resource
         title="Crystal"
-        address="0x05335bb68719881d7ef6f54a07e3b0e2d0a301b5d0a987d704dd39d9f28be3d3"
+        address="0x014a7a59e3e2d058d4c7c868e05907b2b49e324cc5b6af71182f008feb939e91"
         img={crystal}
         iconImg={gem}
         total={points?.crystal}
       />
       <Resource
         title="Deuterium"
-        address="0x026c88a6f9a10bf562cdbebb1f403c5e0e32d706993b4491966855582847f367"
+        address="0x03d4a1f4c738abdb692c5a150267afb975998a311883a67db3bcf218babe41d6"
         img={deuterium}
         iconImg={atom}
         total={points?.deuterium}
